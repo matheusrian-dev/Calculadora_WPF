@@ -48,6 +48,7 @@
                 Grid.Column="3"/>
         <Button Content="7"
                 x:Name="num7Button"
+                Click="num7Button_Click"
                 Margin="5"
                 Grid.Row="2"/>
         <Button Content="8"
