@@ -30,12 +30,13 @@ namespace Calculadora_WPF
             acButton.Click += AcButton_Click;
             negativeButton.Click += NegativeButton_Click;
             percentageButton.Click += PercentageButton_Click;
-            equalsButton.Click += EqualsButton_Click;
+            
         }
 
         private void EqualsButton_Click(object sender, RoutedEventArgs e)
         {
             double newNumber;
+
             if (double.TryParse(resultLabel.Content.ToString(), out newNumber))
             {
                 switch (selectedOperator)
@@ -53,6 +54,8 @@ namespace Calculadora_WPF
                         result = SimpleMath.Divide(lastNumber, newNumber);
                         break;
                 }
+
+                resultLabel.Content = result.ToString();
             }
         }
 
@@ -96,8 +99,8 @@ namespace Calculadora_WPF
         {
             if (resultLabel.Content.ToString().Contains("."))
             {
-                // Do nothing
-            }
+                // Skip
+            }else
             {
                 resultLabel.Content = $"{resultLabel.Content}.";
             }
@@ -105,7 +108,28 @@ namespace Calculadora_WPF
 
         private void NumberButton_Click(object sender, RoutedEventArgs e)
         {
-            int selectedValue = int.Parse((sender as Button).Content.ToString());
+            int selectedValue = 0;
+
+            if (sender == num0Button)
+                selectedValue = 0;
+            if (sender == num1Button)
+                selectedValue = 1;
+            if (sender == num2Button)
+                selectedValue = 2;
+            if (sender == num3Button)
+                selectedValue = 3;
+            if (sender == num4Button)
+                selectedValue = 4;
+            if (sender == num5Button)
+                selectedValue = 5;
+            if (sender == num6Button)
+                selectedValue = 6;
+            if (sender == num7Button)
+                selectedValue = 7;
+            if (sender == num8Button)
+                selectedValue = 8;
+            if (sender == num9Button)
+                selectedValue = 9;
 
             if (resultLabel.Content.ToString() == "0")
             {
