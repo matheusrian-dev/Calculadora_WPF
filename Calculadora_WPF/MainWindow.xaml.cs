@@ -21,6 +21,8 @@ namespace Calculadora_WPF
     public partial class MainWindow : Window
     {
         double lastNumber, result;
+        SelectedOperator selectedOperator;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,7 +35,25 @@ namespace Calculadora_WPF
 
         private void EqualsButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            double newNumber;
+            if (double.TryParse(resultLabel.Content.ToString(), out newNumber))
+            {
+                switch (selectedOperator)
+                {
+                    case SelectedOperator.Addition:
+                        result = SimpleMath.Add(lastNumber, newNumber);
+                        break;
+                    case SelectedOperator.Subtraction:
+                        result = SimpleMath.Subtraction(lastNumber, newNumber);
+                        break;
+                    case SelectedOperator.Multiplication:
+                        result = SimpleMath.Multiply(lastNumber, newNumber);
+                        break;
+                    case SelectedOperator.Division:
+                        result = SimpleMath.Divide(lastNumber, newNumber);
+                        break;
+                }
+            }
         }
 
         private void PercentageButton_Click(object sender, RoutedEventArgs e)
@@ -59,16 +79,73 @@ namespace Calculadora_WPF
             resultLabel.Content = "0";
         }
 
-        private void num7Button_Click(object sender, RoutedEventArgs e)
+        private void OperationButton_Click(object sender, RoutedEventArgs e)
         {
-            if(resultLabel.Content.ToString() == "0")
+            if (double.TryParse(resultLabel.Content.ToString(), out lastNumber))
             {
-                resultLabel.Content = "7";
+                resultLabel.Content = "0";
+            }
+
+            if(sender == starButton) { selectedOperator = SelectedOperator.Multiplication; }
+            if(sender == divisionButton) { selectedOperator = SelectedOperator.Division; }
+            if(sender == plusButton) { selectedOperator = SelectedOperator.Addition; }
+            if(sender == minusButton) { selectedOperator = SelectedOperator.Subtraction; }
+        }
+
+        private void dotButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (resultLabel.Content.ToString().Contains("."))
+            {
+                // Do nothing
+            }
+            {
+                resultLabel.Content = $"{resultLabel.Content}.";
+            }
+        }
+
+        private void NumberButton_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedValue = int.Parse((sender as Button).Content.ToString());
+
+            if (resultLabel.Content.ToString() == "0")
+            {
+                resultLabel.Content = $"{selectedValue}";
             }
             else
             {
-                resultLabel.Content = $"{resultLabel.Content}7";
+                resultLabel.Content = $"{resultLabel.Content}{selectedValue}";
             }
+        }
+    }
+
+    public enum SelectedOperator
+    {
+        Addition,
+        Subtraction,
+        Multiplication,
+        Division
+    }
+
+    public class SimpleMath
+    {
+        public static double Add(double num1, double num2)
+        {
+            return num1 + num2;
+        }
+
+        public static double Subtraction(double num1, double num2)
+        {
+            return num1 - num2;
+        }
+
+        public static double Multiply(double num1, double num2)
+        {
+            return num1 * num2;
+        }
+
+        public static double Divide(double num1, double num2)
+        {
+            return num1 / num2;
         }
     }
 }
