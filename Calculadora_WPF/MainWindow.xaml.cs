@@ -30,7 +30,7 @@ namespace Calculadora_WPF
             acButton.Click += AcButton_Click;
             negativeButton.Click += NegativeButton_Click;
             percentageButton.Click += PercentageButton_Click;
-            
+
         }
 
         private void EqualsButton_Click(object sender, RoutedEventArgs e)
@@ -61,16 +61,18 @@ namespace Calculadora_WPF
 
         private void PercentageButton_Click(object sender, RoutedEventArgs e)
         {
-            if (double.TryParse(resultLabel.Content.ToString(), out lastNumber))
+            double tempNumber;
+            if (double.TryParse(resultLabel.Content.ToString(), out tempNumber))
             {
-                lastNumber = lastNumber / 100;
-                resultLabel.Content = lastNumber.ToString();
+                tempNumber = tempNumber / 100;
+                if(lastNumber != 0) { tempNumber *= lastNumber; }
+                resultLabel.Content = tempNumber.ToString();
             }
         }
 
         private void NegativeButton_Click(object sender, RoutedEventArgs e)
         {
-            if(double.TryParse(resultLabel.Content.ToString(), out lastNumber))
+            if (double.TryParse(resultLabel.Content.ToString(), out lastNumber))
             {
                 lastNumber = lastNumber * -1;
                 resultLabel.Content = lastNumber.ToString();
@@ -80,6 +82,8 @@ namespace Calculadora_WPF
         private void AcButton_Click(object sender, RoutedEventArgs e)
         {
             resultLabel.Content = "0";
+            result = 0;
+            lastNumber = 0;
         }
 
         private void OperationButton_Click(object sender, RoutedEventArgs e)
@@ -89,10 +93,10 @@ namespace Calculadora_WPF
                 resultLabel.Content = "0";
             }
 
-            if(sender == starButton) { selectedOperator = SelectedOperator.Multiplication; }
-            if(sender == divisionButton) { selectedOperator = SelectedOperator.Division; }
-            if(sender == plusButton) { selectedOperator = SelectedOperator.Addition; }
-            if(sender == minusButton) { selectedOperator = SelectedOperator.Subtraction; }
+            if (sender == starButton) { selectedOperator = SelectedOperator.Multiplication; }
+            if (sender == divisionButton) { selectedOperator = SelectedOperator.Division; }
+            if (sender == plusButton) { selectedOperator = SelectedOperator.Addition; }
+            if (sender == minusButton) { selectedOperator = SelectedOperator.Subtraction; }
         }
 
         private void dotButton_Click(object sender, RoutedEventArgs e)
@@ -100,7 +104,8 @@ namespace Calculadora_WPF
             if (resultLabel.Content.ToString().Contains("."))
             {
                 // Skip
-            }else
+            }
+            else
             {
                 resultLabel.Content = $"{resultLabel.Content}.";
             }
@@ -169,7 +174,13 @@ namespace Calculadora_WPF
 
         public static double Divide(double num1, double num2)
         {
-            return num1 / num2;
+            if (num2 != 0)
+            {
+                return num1 / num2;
+            }
+            MessageBox.Show("Uma divisão por zero não pode ser executada!", "Operação Incorreta", MessageBoxButton.OK, MessageBoxImage.Error); // Division by 0 is not supported
+            return 0;
+
         }
     }
 }
